@@ -1,22 +1,101 @@
 const { Router } = require("express");
 const router = Router();
 const userMiddleware = require("../middleware/user");
+const {User,Course} = require('../db/index');
+const { default: mongoose } = require("mongoose");
+const ObjectId = require('mongodb').ObjectId;
 
-// User Routes
-router.post('/signup', (req, res) => {
-    // Implement user signup logic
+router.post('/signup',async (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    const existingAdmin = await User.findOne({username:username,password:password});
+    if(existingAdmin){
+        res.status(402).json({
+            msg: "User already exists"
+        })
+    }    
+
+    const user = new User({
+        username: username,
+        password: password
+    })
+    await user.save();
+    res.json({
+        message: 'User created successfully'
+    })    
 });
 
-router.get('/courses', (req, res) => {
-    // Implement listing all courses logic
+router.get('/courses', userMiddleware, async (req, res) => {
+    const courses = await Course.find();
+    res.json({
+        courses
+    })
+
 });
 
-router.post('/courses/:courseId', userMiddleware, (req, res) => {
-    // Implement course purchase logic
+router.post('/courses/:courseID', userMiddleware, async (req, res) => {
+    const { courseID } = req.params;
+    const { username } = req.headers;
+    const isValid = mongoose.Types.ObjectId.isValid(courseID);
+
+    if (!isValid) {
+        return res.json({
+            msg: "courseID invalid"
+        });
+    }
+
+    const course = await Course.findOne(new ObjectId(courseID));
+
+    if (!course) {
+        return res.status(404).json({
+            msg: "course not found"
+        });
+    }
+
+    try {
+        await User.findOneAndUpdate({ username: username }, {
+            $addToSet: { course: courseID }
+        });
+
+        res.json({
+            id: courseID,
+            message: `${courseID} purchased`
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            msg: "Internal Server Error"
+        });
+    }
 });
 
-router.get('/purchasedCourses', userMiddleware, (req, res) => {
-    // Implement fetching purchased courses logic
+
+router.get('/purchasedCourses', userMiddleware, async (req, res) => {
+    const { username } = req.headers;
+
+    try {
+        const userData = await User.findOne({ username: username });
+
+        if (!userData) {
+            return res.status(404).json({
+                msg: "User not found"
+            });
+        }
+
+        const purchasedCourses = userData.course || [];
+
+        res.json({
+            username: username,
+            purchasedCourses: purchasedCourses
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            msg: "Internal Server Error"
+        });
+    }
 });
+
 
 module.exports = router

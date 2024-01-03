@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function addTodo(e) {
+        const todo = document.getElementById("todo").value;
+        const desc = document.getElementById("desc").value;
+        const container = document.getElementById("container");
+
+        const node = document.createElement(
+          `<div>
+            <div>TOOD: ${todo}</div>
+            <div>Description: ${desc}</div>
+            <button>Mark as Document</button>
+        </div>`
+        );
+        container.appendChild(node);
+      }
+    </script>
+    <title>Task</title><input id="todo" type="text" placeholder="Title" />
+    <title>Description</title
+    ><input id="desc" type="text" placeholder="Description" />
+    <button onclick="addTodo()">Add todo</button>
+    <div id="container">
+      <div>
+        <div>TOOD:</div>
+        <div>Description</div>
+        <button>Mark as Document</button>
+      </div>
+    </div>
+  </body>
+</html>

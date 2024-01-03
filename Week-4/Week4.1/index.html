@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let timeout;
+        function debouncedSubmit(){
+            clearTimeout(timeout)
+            timeout = setTimeout(function(){
+                handleSubmit();
+            },1000)
+        }
+
+        function handleSubmit(e){
+            const fn = Number(document.getElementById("fn").value);
+            const sn = Number(document.getElementById("sn").value);
+            const h1 = document.getElementById("sn");
+            const sum = Number(fn + sn);
+            document.getElementById("h1").innerHTML = `sum is ${sum}`;
+
+        }
+    </script>
+    <input oninput=debouncedSubmit() id="fn" placeholder="First Number" type="number">
+    <input oninput=debouncedSubmit() id="sn" placeholder="Second Number" type="number">
+    
+    <!-- <button onclick=handleSubmit()>Get Sum</button> -->
+    <h1 id="h1"></h1>
+</body>
+</html>

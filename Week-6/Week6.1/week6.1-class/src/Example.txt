@@ -1,0 +1,105 @@
+import React, { useState } from 'react'
+
+const App = () => {
+
+  const [user, setUser] = useState("Priyam")
+  const handleChange = () =>{
+    let x = Math.random()*10;
+    setUser(x);
+  }
+  return (
+    <>
+      <button onClick={handleChange}>Click to change the title</button>
+      <Header title={user}/>
+      {/* <Header title={"TITLE From app"}/> */}
+    </>
+  )
+}
+
+const Header = ({title})=>{
+  return(
+    <div>
+      Current User is {title}
+    </div>
+  )
+}
+
+export default App
+
+Pushing the state down to reduce re-rendering
+
+import React, { useState } from 'react'
+
+const App = () => {
+  return (
+    <>
+      <Header title={"Priyam"}/>
+      <HeaderWithButton />
+    </>
+  )
+}
+
+const HeaderWithButton = () =>{
+  const [user , setUser] = useState("Priyam");
+  const handleChange = ()=>{
+    let x = (Math.random()*10);
+    setUser(x);
+  }
+  return(
+    <>
+      <button onClick={handleChange}>Click here</button>
+      <Header title={user}/>
+    </>
+  )
+  
+}
+
+const Header = ({title})=>{
+    return(
+      <div>
+        Current User is {title}
+      </div>
+    )
+  }
+  
+
+export default App
+
+
+Using React.memo() to stop re-rendering the function unless the prop has changed
+
+import React, { useState } from 'react'
+
+const App = () => {
+
+  const [user, setUser] = useState("Priyam")
+  const handleChange = () =>{
+    let x = Math.random()*10;
+    setUser(x);
+  }
+  return (
+    <>
+      <button onClick={handleChange}>Click to change the title</button>
+      <Header title={user}></Header>
+      <br />
+      <Header title="TITLE From app"/>
+      <Header title="TITLE From app"/>
+      <Header title="TITLE From app"/>
+      <Header title="TITLE From app"/>
+      <Header title="TITLE From app"/>
+      <Header title="TITLE From app"/>
+      <Header title="TITLE From app"/>
+      
+    </>
+  )
+}
+
+const Header = React.memo(function ({title}){
+  return(
+    <div>
+      {title}
+    </div>
+  )
+})
+
+export default App

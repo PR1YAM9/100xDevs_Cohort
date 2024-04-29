@@ -81,31 +81,57 @@
 
 // type id = number | string 
 
-type Employee = {
-    name: string,
-    startDate: Date
+// type Employee = {
+//     name: string,
+//     startDate: Date
+// }
+
+// interface Manager {
+//     name: string,
+//     endDate: Date
+// }
+
+// type TeamLeader = Employee & Manager;
+
+// const teamLead: TeamLeader = {
+//     name: "Priyam",
+//     startDate: new Date(),
+//     endDate: new Date()
+// }
+
+// console.log(teamLead)
+
+
+// function maxValue(arr: number[]){
+//     let num =0;
+//     for (let i = 0;i<arr.length;i++){
+//         num = Math.max(num,arr[i]);
+//     }
+//     console.log(num)
+// }
+
+
+// Enums: set of named constants 
+
+// enum Directions {
+//     Up,
+//     Down,
+//     Left, 
+//     Right
+// }
+
+// function doSomething(keyPresses: Directions){
+//     //
+// } 
+
+// doSomething(Directions.Up);
+
+
+// Generics
+
+function callSomething<T>(input : T): T{
+    return input;
 }
 
-interface Manager {
-    name: string,
-    endDate: Date
-}
-
-type TeamLeader = Employee & Manager;
-
-const teamLead: TeamLeader = {
-    name: "Priyam",
-    startDate: new Date(),
-    endDate: new Date()
-}
-
-console.log(teamLead)
-
-
-function maxValue(arr: number[]){
-    let num =0;
-    for (let i = 0;i<arr.length;i++){
-        num = Math.max(num,arr[i]);
-    }
-    console.log(num)
-}
+console.log(callSomething<String>("String"))
+console.log(callSomething(1))
